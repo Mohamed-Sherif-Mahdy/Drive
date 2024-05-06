@@ -36,7 +36,11 @@ namespace Drive
       builder.Services.AddScoped<IAuthService, AuthService>();
 
 
-      builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+      builder.Services.AddAuthentication(options =>
+      {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      })
         .AddJwtBearer(options =>
         {
           options.TokenValidationParameters = new TokenValidationParameters
@@ -65,6 +69,8 @@ namespace Drive
       }
 
       app.UseHttpsRedirection();
+
+
 
       app.UseAuthentication();
       app.UseAuthorization();

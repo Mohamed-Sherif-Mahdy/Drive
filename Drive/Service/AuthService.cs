@@ -13,11 +13,13 @@ namespace Drive.Service
     private readonly UserManager<User> _userManager;
 
     private readonly IConfiguration _configuration;
-    public AuthService(UserManager<User> userManager, IConfiguration configuration)
+    private readonly RoleManager<IdentityRole> _roleManager;
+    public AuthService(UserManager<User> userManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
     {
       _userManager = userManager;
 
       _configuration = configuration;
+      _roleManager = roleManager;
     }
     public async Task<RegistrationOutPut> RegisterUser(RegistrationUserDTO user)
     {
@@ -59,7 +61,7 @@ namespace Drive.Service
       };
     }
 
-    public async Task<JwtSecurityToken> CreateJwtToken(User user)
+    private async Task<JwtSecurityToken> CreateJwtToken(User user)
     {
       var userClaims = await _userManager.GetClaimsAsync(user);
       var roles = await _userManager.GetRolesAsync(user);
@@ -85,6 +87,94 @@ namespace Drive.Service
        signingCredentials: signingCredentials
        );
       return jwtSecurityToken;
+    }
+    public async Task<RegistrationOutPut> LoginUser(LoginDTO user)
+    {
+      if (await _userManager.FindByEmailAsync(user.Email) is null)
+      {
+        return new RegistrationOutPut { ErrorMessage = "The Email is Not Registrated Yet.." };
+      }
+      User existingUser = await _userManager.FindByEmailAsync(user.Email);
+      bool isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+      if (!isCorrect)
+      {
+        return new RegistrationOutPut { ErrorMessage = "Invalid Password" };
+      }
+      var JwtSecurityToken = await CreateJwtToken(existingUser);
+      return new RegistrationOutPut
+      {
+        Username = existingUser.UserName,
+        Email = existingUser.Email,
+        IsAuthenticated = true,
+        Roles = (List<string>)await _userManager.GetRolesAsync(existingUser),
+        Token = new JwtSecurityTokenHandler().WriteToken(JwtSecurityToken),
+        ExpirationOn = JwtSecurityToken.ValidTo
+      };
+
+
+    }
+
+    public async Task<RegistrationOutPut> LogoutUser(LoginDTO user)
+    {
+      //remove token 
+      await _userManager.RemoveAuthenticationTokenAsync(_userManager.FindByEmailAsync(user.Email).Result, "JWT", "Token");
+      return new RegistrationOutPut { ErrorMessage = "Token Removed" };
+    }
+
+    public async Task<string> AssignRole(UserToRoleDTO user)
+    {
+      var ExistingUser = await _userManager.FindByIdAsync(user.UserId);
+
+      if (ExistingUser is null)
+      {
+        return "There is no user by this ID";
+      }
+      if (await _roleManager.FindByNameAsync(user.Role) is null)
+      {
+        return "There is no role by this name";
+      }
+      if (await _userManager.IsInRoleAsync(ExistingUser, user.Role))
+      {
+        return "User already has this role";
+      }
+      await _userManager.AddToRoleAsync(ExistingUser, user.Role);
+      return "Role Assigned Successfully";
+    }
+    //public async Task<string> UpdateRole(UpdateRoleForUserDTO user)
+    //{
+
+
+
+    //}
+
+    public async Task<string> DeleteRole(UserToRoleDTO user)
+    {
+      var ExistingUser = await _userManager.FindByIdAsync(user.UserId);
+      if (ExistingUser is null)
+      {
+        return "There is no user by this ID";
+      }
+      if (await _roleManager.FindByNameAsync(user.Role) is null)
+      {
+        return "There is no role by this name";
+      }
+      if (!await _userManager.IsInRoleAsync(ExistingUser, user.Role))
+      {
+        return "User does not have this role";
+      }
+      await _userManager.RemoveFromRoleAsync(ExistingUser, user.Role);
+      return "Role Removed Successfully";
+
+    }
+    public async Task<string> GetRoles(string userId)
+    {
+      var ExistingUser = await _userManager.FindByIdAsync(userId);
+      if (ExistingUser is null)
+      {
+        return "There is no user by this ID";
+      }
+      var roles = await _userManager.GetRolesAsync(ExistingUser);
+      return string.Join(",", roles);
     }
   }
 }
