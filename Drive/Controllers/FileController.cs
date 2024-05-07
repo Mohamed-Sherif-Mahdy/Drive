@@ -16,13 +16,15 @@ namespace Drive.Controllers
       string Name = string.Empty;
       var currentUser = HttpContext.User;
       Name = currentUser.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+      //string userId = currentUser.Claims.FirstOrDefault(x => x.Type == "uid").Value;
+
 
       return Ok(new FileHandlerService(Name).Upload(file));
 
 
     }
 
-    [HttpGet("GetAllFilesForTheUser")]
+    [HttpGet("GetAllFilesForTheUser"), Authorize]
     public IActionResult GetAllFilesForTheUser()
     {
       //get the user name from the token
@@ -30,6 +32,15 @@ namespace Drive.Controllers
       var currentUser = HttpContext.User;
       Name = currentUser.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
       return Ok(new FileHandlerService(Name).GetAllFilesForTheUser());
+    }
+    [HttpPost("Deletefile"), Authorize]
+    public IActionResult DeleteFile(string fileName)
+    {
+      //get the user name from the token
+      string Name = string.Empty;
+      var currentUser = HttpContext.User;
+      Name = currentUser.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+      return Ok(new FileHandlerService(Name).DeleteFile(fileName));
     }
   }
 }

@@ -4,6 +4,7 @@ using Drive.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Drive.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507075811_UserToFile")]
+    partial class UserToFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,6 +70,10 @@ namespace Drive.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FileId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -143,13 +150,13 @@ namespace Drive.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e159ba0c-1c39-4020-8e5b-93f57bb18c84",
+                            Id = "3979fd7c-d380-4f5d-bac6-6d3a7191ab41",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "77e87b64-92ef-42fa-8813-253f2dbbe2f1",
+                            Id = "c39a52fb-1a9e-4f5d-9d87-7ee0069d312b",
                             Name = "User",
                             NormalizedName = "USER"
                         });

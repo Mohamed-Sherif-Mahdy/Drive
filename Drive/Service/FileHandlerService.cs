@@ -3,10 +3,14 @@
   public class FileHandlerService : IFileHandlerService
   {
     string Name;
-    public FileHandlerService(string name)
+
+
+
+    public FileHandlerService(string name, string id = null)
     {
       Name = name;
     }
+
     private readonly long ConvertionNumber = 1024 * 1024;
     private List<string> ValidExtentions = new() { ".jpg", ".png", ".gif", ".txt", ".csv", ".xml", ".json", ".md", ".doc", ".pdf" };
     private int MaxFileSizeInMb = 10;
@@ -29,6 +33,9 @@
       string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name);
       using FileStream fileStream = new FileStream(Path.Combine(path, FileName), FileMode.Create);
       file.CopyTo(fileStream);
+      //Modles.File file2 = new() { User = new Modles.User(), FileName = FileName, FilePath = path, UserId = id };
+      //dbContext.Add(file2);
+      //dbContext.SaveChanges();
 
       return $"Uploading...{file.Name}";
 
@@ -71,9 +78,29 @@
       if (!exists)
         return new List<string>();
       string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name);
-      return Directory.GetFiles(path).ToList();
+      List<string> Names = new List<string>();
+
+      foreach (string file in Directory.GetFiles(path).ToList())
+      {
+        Names.Add(file.Split(Path.DirectorySeparatorChar).Last());
+      }
+
+      return Names;
 
     }
 
+    public string DeleteFile(string fileName)
+    {
+      List<string> files = GetAllFilesForTheUser();
+      if (files.Contains(fileName))
+      {
+        string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name, fileName);
+        File.Delete(path);
+        return $"{fileName} is Deleted..";
+      }
+      return $"{fileName} is not found..";
+
+
+    }
   }
 }

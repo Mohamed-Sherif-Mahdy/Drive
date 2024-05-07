@@ -4,6 +4,7 @@
   {
     public string Upload(IFormFile file);
     public List<string> GetAllFilesForTheUser();
+    public string DeleteFile(string fileName);
 
   }
 }
