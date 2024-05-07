@@ -1,5 +1,7 @@
-﻿using Drive.PublicClasses;
+﻿using Drive.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Drive.Controllers
 {
@@ -7,12 +9,27 @@ namespace Drive.Controllers
   [ApiController]
   public class FileController : ControllerBase
   {
-    [HttpPost]
-    public IActionResult Upload(IFormFile file)
+    [HttpPost("Upload"), Authorize]
+    public async Task<IActionResult> UploadAsync(IFormFile file)
     {
-      return Ok(new UploadHandler().Upload(file));
+      //get the user name from the token
+      string Name = string.Empty;
+      var currentUser = HttpContext.User;
+      Name = currentUser.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+      return Ok(new FileHandlerService(Name).Upload(file));
 
 
+    }
+
+    [HttpGet("GetAllFilesForTheUser")]
+    public IActionResult GetAllFilesForTheUser()
+    {
+      //get the user name from the token
+      string Name = string.Empty;
+      var currentUser = HttpContext.User;
+      Name = currentUser.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+      return Ok(new FileHandlerService(Name).GetAllFilesForTheUser());
     }
   }
 }

@@ -51,16 +51,16 @@ namespace Drive.Controllers
       });
     }
 
-    [HttpGet("logout")]
-    public async Task<IActionResult> Logout()
-    {
-      //access token from header
+    //[HttpGet("logout")]
+    //public async Task<IActionResult> Logout()
+    //{
+    //  //access token from header
 
-      Request.Headers["Authorization"] = string.Empty;
-      return Ok();
+    //  Request.Headers["Authorization"] = string.Empty;
+    //  return Ok();
 
 
-    }
+    //}
 
     [HttpPost("assignrole")]
     [Authorize(Roles = "Admin")]
