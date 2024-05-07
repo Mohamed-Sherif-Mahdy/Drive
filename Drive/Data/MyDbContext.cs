@@ -19,6 +19,7 @@ namespace Drive.Data
       modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "User", NormalizedName = "USER" });
     }
     public DbSet<Modles.File> Files { get; set; }
+    public DbSet<User> Users { get; set; }
 
 
   }

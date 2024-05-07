@@ -4,6 +4,7 @@ using Drive.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Drive.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507113728_User2")]
+    partial class User2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,13 +146,13 @@ namespace Drive.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ea3ed385-8117-4a79-b1fc-151d690d3340",
+                            Id = "fc6a7eb9-6e39-4748-af65-ed443b934ff1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "d939db8d-1d2e-434e-9481-f0321a7deb49",
+                            Id = "e59eab2d-e5d2-4e8f-b84a-f1bf578fc85c",
                             Name = "User",
                             NormalizedName = "USER"
                         });

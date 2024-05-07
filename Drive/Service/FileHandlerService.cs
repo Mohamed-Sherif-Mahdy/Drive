@@ -1,14 +1,16 @@
-﻿namespace Drive.Service
+﻿using System.Security.Claims;
+
+namespace Drive.Service
 {
   public class FileHandlerService : IFileHandlerService
   {
-    string Name;
+    ClaimsPrincipal _claims;
 
 
 
-    public FileHandlerService(string name, string id = null)
+    public FileHandlerService(ClaimsPrincipal claims)
     {
-      Name = name;
+      _claims = claims;
     }
 
     private readonly long ConvertionNumber = 1024 * 1024;
@@ -24,6 +26,7 @@
 
       if (!CheekSize(file)) return $"Maximum size can be {MaxFileSizeInMb}..";
       if (Exists(file.FileName)) return "File already exists..";
+      string Name = _claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
       string FileName = file.FileName;
       bool exists = Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name));
@@ -33,9 +36,21 @@
       string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name);
       using FileStream fileStream = new FileStream(Path.Combine(path, FileName), FileMode.Create);
       file.CopyTo(fileStream);
-      //Modles.File file2 = new() { User = new Modles.User(), FileName = FileName, FilePath = path, UserId = id };
-      //dbContext.Add(file2);
-      //dbContext.SaveChanges();
+
+      //add in the database data about the file
+
+      new Modles.File
+      {
+        UserId = _claims.Identities.FirstOrDefault().Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value,
+        FileName = FileName,
+        FilePath = Path.Combine(path, FileName),
+        Description = "This is a file"
+
+      };
+
+
+
+
 
       return $"Uploading...{file.Name}";
 
@@ -73,6 +88,8 @@
     }
     public List<string> GetAllFilesForTheUser()
     {
+      string Name = _claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
       bool exists = Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name));
 
       if (!exists)
@@ -91,6 +108,8 @@
 
     public string DeleteFile(string fileName)
     {
+      string Name = _claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
       List<string> files = GetAllFilesForTheUser();
       if (files.Contains(fileName))
       {

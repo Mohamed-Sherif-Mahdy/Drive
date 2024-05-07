@@ -12,7 +12,7 @@ namespace Drive.Modles
     public string? Description { get; set; }
     [ForeignKey("User")]
     public string UserId { get; set; }
-    public required User User { get; set; }
+    public User User { get; set; }
 
   }
 }
