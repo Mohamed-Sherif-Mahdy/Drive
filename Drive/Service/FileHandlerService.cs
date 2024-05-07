@@ -1,22 +1,24 @@
-﻿using System.Security.Claims;
+﻿using Drive.Repository;
+using System.Security.Claims;
 
 namespace Drive.Service
 {
   public class FileHandlerService : IFileHandlerService
   {
-    ClaimsPrincipal _claims;
 
+    IRepository<Modles.File> _fileRepository;
+    IRepository<Modles.User> _userRepository;
 
-
-    public FileHandlerService(ClaimsPrincipal claims)
+    public FileHandlerService(IRepository<Modles.File> fileRepository, IRepository<Modles.User> userRepository)
     {
-      _claims = claims;
+      _fileRepository = fileRepository;
+      _userRepository = userRepository;
     }
 
     private readonly long ConvertionNumber = 1024 * 1024;
     private List<string> ValidExtentions = new() { ".jpg", ".png", ".gif", ".txt", ".csv", ".xml", ".json", ".md", ".doc", ".pdf" };
     private int MaxFileSizeInMb = 10;
-    public string Upload(IFormFile file)
+    public string Upload(IFormFile file, ClaimsPrincipal claimsPrincipal)
     {
       if (file == null) return "You Have to upload a file..";
 
@@ -26,7 +28,7 @@ namespace Drive.Service
 
       if (!CheekSize(file)) return $"Maximum size can be {MaxFileSizeInMb}..";
       if (Exists(file.FileName)) return "File already exists..";
-      string Name = _claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+      string Name = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
       string FileName = file.FileName;
       bool exists = Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name));
@@ -38,15 +40,17 @@ namespace Drive.Service
       file.CopyTo(fileStream);
 
       //add in the database data about the file
-
-      new Modles.File
+      _fileRepository.Add(new Modles.File
       {
-        UserId = _claims.Identities.FirstOrDefault().Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value,
+        UserId = "0b95d298-ce3a-4531-845e-08511e970c74",// _claims.Identities.FirstOrDefault().Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value,
         FileName = FileName,
         FilePath = Path.Combine(path, FileName),
-        Description = "This is a file"
+        Description = "This is a file",
+        FileId = Guid.NewGuid().ToString()
 
-      };
+      });
+
+
 
 
 
@@ -88,7 +92,7 @@ namespace Drive.Service
     }
     public List<string> GetAllFilesForTheUser()
     {
-      string Name = _claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+      string Name = "Mohamed";//_claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
       bool exists = Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Name));
 
@@ -108,7 +112,7 @@ namespace Drive.Service
 
     public string DeleteFile(string fileName)
     {
-      string Name = _claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+      string Name = "Mohamed";//_claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
       List<string> files = GetAllFilesForTheUser();
       if (files.Contains(fileName))

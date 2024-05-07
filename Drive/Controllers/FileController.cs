@@ -9,6 +9,11 @@ namespace Drive.Controllers
   [ApiController]
   public class FileController : ControllerBase
   {
+    private readonly IFileHandlerService _fileHandlerService;
+    public FileController(IFileHandlerService fileHandlerService)
+    {
+      _fileHandlerService = fileHandlerService;
+    }
     [HttpPost("Upload"), Authorize]
     public async Task<IActionResult> UploadAsync(IFormFile file)
     {
@@ -19,7 +24,7 @@ namespace Drive.Controllers
       //string userId = currentUser.Claims.FirstOrDefault(x => x.Type == "uid").Value;
 
 
-      return Ok(new FileHandlerService(claimsPrincipal).Upload(file));
+      return Ok(_fileHandlerService.Upload(file, ClaimsPrincipal claimsPrincipal));
 
 
     }
@@ -30,7 +35,7 @@ namespace Drive.Controllers
       //get the user name from the token
       string Name = string.Empty;
       var currentUser = HttpContext.User;
-      return Ok(new FileHandlerService(currentUser).GetAllFilesForTheUser());
+      return Ok(_fileHandlerService.GetAllFilesForTheUser());
     }
     [HttpPost("Deletefile"), Authorize]
     public IActionResult DeleteFile(string fileName)
@@ -38,7 +43,7 @@ namespace Drive.Controllers
       //get the user name from the token
       string Name = string.Empty;
       var currentUser = HttpContext.User;
-      return Ok(new FileHandlerService(currentUser).DeleteFile(fileName));
+      return Ok(_fileHandlerService.DeleteFile(fileName));
     }
   }
 }

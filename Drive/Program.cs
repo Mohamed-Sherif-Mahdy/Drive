@@ -1,6 +1,7 @@
 
 using Drive.Data;
 using Drive.Modles;
+using Drive.Repository;
 using Drive.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,8 @@ namespace Drive
 
       builder.Services.AddIdentity<User, IdentityRole>()
         .AddEntityFrameworkStores<MyDbContext>();
+      builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+      builder.Services.AddScoped<IFileHandlerService, FileHandlerService>();
 
 
       builder.Services.AddScoped<IAuthService, AuthService>();
