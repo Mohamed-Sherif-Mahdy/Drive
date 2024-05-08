@@ -4,6 +4,7 @@ using Drive.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Drive.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507162838_tryy")]
+    partial class tryy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,6 +30,9 @@ namespace Drive.Migrations
                     b.Property<string>("FileId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -35,13 +41,13 @@ namespace Drive.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("FileId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserName");
 
                     b.ToTable("Files");
                 });
@@ -140,13 +146,13 @@ namespace Drive.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c865092b-acfb-49be-a052-cdc81ccc968e",
+                            Id = "781c501e-947c-4105-b6bb-37acc2263a62",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ef7f690a-baf8-4506-9643-34e7add7cf92",
+                            Id = "c713cf4f-c05c-4dfc-a6ab-71acc15f8a44",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -262,7 +268,7 @@ namespace Drive.Migrations
                 {
                     b.HasOne("Drive.Modles.User", "User")
                         .WithMany("Files")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

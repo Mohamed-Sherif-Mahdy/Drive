@@ -7,7 +7,7 @@
 namespace Drive.Migrations
 {
     /// <inheritdoc />
-    public partial class UserToFile : Migration
+    public partial class tryy : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,21 +15,13 @@ namespace Drive.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "2a6ff5ed-fb87-478c-900f-ba8d160ca3d4"
+                keyValue: "be505655-02bd-456e-bb13-58f9f3fae9a6"
             );
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "fc3e645b-125e-4d8f-88a2-5875d8cab6a4"
-            );
-
-            migrationBuilder.AddColumn<string>(
-                name: "FileId",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: ""
+                keyValue: "cfd7388e-56e2-4a1f-8082-cb5b47abaff5"
             );
 
             migrationBuilder.InsertData(
@@ -37,8 +29,8 @@ namespace Drive.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3979fd7c-d380-4f5d-bac6-6d3a7191ab41", null, "Admin", "ADMIN" },
-                    { "c39a52fb-1a9e-4f5d-9d87-7ee0069d312b", null, "User", "USER" }
+                    { "781c501e-947c-4105-b6bb-37acc2263a62", null, "Admin", "ADMIN" },
+                    { "c713cf4f-c05c-4dfc-a6ab-71acc15f8a44", null, "User", "USER" }
                 }
             );
         }
@@ -49,24 +41,22 @@ namespace Drive.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "3979fd7c-d380-4f5d-bac6-6d3a7191ab41"
+                keyValue: "781c501e-947c-4105-b6bb-37acc2263a62"
             );
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "c39a52fb-1a9e-4f5d-9d87-7ee0069d312b"
+                keyValue: "c713cf4f-c05c-4dfc-a6ab-71acc15f8a44"
             );
-
-            migrationBuilder.DropColumn(name: "FileId", table: "AspNetUsers");
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2a6ff5ed-fb87-478c-900f-ba8d160ca3d4", null, "Admin", "ADMIN" },
-                    { "fc3e645b-125e-4d8f-88a2-5875d8cab6a4", null, "User", "USER" }
+                    { "be505655-02bd-456e-bb13-58f9f3fae9a6", null, "User", "USER" },
+                    { "cfd7388e-56e2-4a1f-8082-cb5b47abaff5", null, "Admin", "ADMIN" }
                 }
             );
         }

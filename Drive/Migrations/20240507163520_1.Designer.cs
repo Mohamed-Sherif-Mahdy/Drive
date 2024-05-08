@@ -4,6 +4,7 @@ using Drive.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Drive.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507163520_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +29,9 @@ namespace Drive.Migrations
                 {
                     b.Property<string>("FileId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FileName")
                         .IsRequired()
@@ -140,13 +146,13 @@ namespace Drive.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c865092b-acfb-49be-a052-cdc81ccc968e",
+                            Id = "8d3cf401-184d-4a90-b98c-8f74e7bf942a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ef7f690a-baf8-4506-9643-34e7add7cf92",
+                            Id = "04588922-211b-4cf4-8d40-c31e4434e2f2",
                             Name = "User",
                             NormalizedName = "USER"
                         });

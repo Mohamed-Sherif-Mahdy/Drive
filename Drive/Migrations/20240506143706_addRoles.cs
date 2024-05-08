@@ -19,7 +19,8 @@ namespace Drive.Migrations
                 {
                     { "2a6ff5ed-fb87-478c-900f-ba8d160ca3d4", null, "Admin", "ADMIN" },
                     { "fc3e645b-125e-4d8f-88a2-5875d8cab6a4", null, "User", "USER" }
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
@@ -28,12 +29,14 @@ namespace Drive.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "2a6ff5ed-fb87-478c-900f-ba8d160ca3d4");
+                keyValue: "2a6ff5ed-fb87-478c-900f-ba8d160ca3d4"
+            );
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "fc3e645b-125e-4d8f-88a2-5875d8cab6a4");
+                keyValue: "fc3e645b-125e-4d8f-88a2-5875d8cab6a4"
+            );
         }
     }
 }
