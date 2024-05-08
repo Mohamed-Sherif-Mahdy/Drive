@@ -2,10 +2,11 @@
 
 namespace Drive.Service
 {
-    public interface IFileHandlerService
-    {
-        public string Upload(IFormFile file, ClaimsPrincipal claimsPrincipal);
-        public List<string> GetAllFilesForTheUser(ClaimsPrincipal claimsPrincipal);
-        public string DeleteFile(string fileName, ClaimsPrincipal claimsPrincipal);
-    }
+  public interface IFileHandlerService
+  {
+    public string Upload(IFormFile file, ClaimsPrincipal claimsPrincipal);
+    public List<string> GetAllFilesForTheUser(ClaimsPrincipal claimsPrincipal);
+    public string DeleteFile(string fileName, ClaimsPrincipal claimsPrincipal);
+    public Task<string> DownloadFile(string fileName, ClaimsPrincipal currentUser);
+  }
 }
