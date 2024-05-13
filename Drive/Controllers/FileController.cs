@@ -31,14 +31,14 @@ namespace Drive.Controllers
             return Ok(_fileHandlerService.GetAllFilesForTheUser(currentUser));
         }
 
-        [HttpPost("Deletefile"), Authorize]
+        [HttpDelete("Deletefile"), Authorize]
         public IActionResult DeleteFile(string fileName)
         {
             var currentUser = HttpContext.User;
             return Ok(_fileHandlerService.DeleteFile(fileName, currentUser));
         }
 
-        [HttpPost("DownloadFile"), Authorize]
+        [HttpGet("DownloadFile"), Authorize]
         public async Task<IActionResult> DownloadFile(string fileName)
         {
             var currentUser = HttpContext.User;
